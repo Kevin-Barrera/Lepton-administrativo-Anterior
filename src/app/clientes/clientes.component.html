@@ -1,0 +1,91 @@
+<div class="header">
+    <h2>Listado de Clientes</h2>
+    <hr class="divider">
+</div>
+
+<div class="header">
+    <h3>Filtrar</h3>
+    <div class="filter-bar">
+        <div class="filter-container">
+            <label for="status">Estatus:</label>
+            <select id="status" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+                <option value="">Todos</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+                <option value="pendiente">Pendiente</option>
+            </select>
+
+            <label for="comprobante">Tipo de Comprobante:</label>
+            <select id="comprobante" [(ngModel)]="selectedComprobante" (change)="applyFilters()">
+                <option value="">Todos</option>
+                <option value="recibo">Recibo</option>
+                <option value="factura">Factura</option>
+            </select>
+            <div class="pagination-container">
+                <button class="filter-btn" (click)="toggleShowAll()">
+                    {{ showAll ? 'Paginado' : 'Mostrar todos' }}
+                </button>
+
+                <div class="pagination" *ngIf="!showAll">
+                    <button class="pagination-btn" (click)="setPage(currentPage - 1)"
+                        [disabled]="currentPage === 1">«</button>
+                    <button *ngFor="let page of [].constructor(totalPages); let i = index" class="pagination-btn"
+                        [class.active]="currentPage === (i + 1)" (click)="setPage(i + 1)">
+                        {{ i + 1 }}
+                    </button>
+                    <button class="pagination-btn" (click)="setPage(currentPage + 1)"
+                        [disabled]="currentPage === totalPages">»</button>
+                </div>
+            </div>
+
+        </div>
+        <button class="new-button" (click)="openModal()">
+            <span class="material-icons">add</span> Nuevo
+        </button>
+        <!-- Modal de Registro de Cliente -->
+        <app-register-clientes-modal (clienteRegistered)="addNewCliente($event)"></app-register-clientes-modal>
+        <app-edit-clientes-modal #editClientesModal (clienteUpdated)="actualizarCliente($event)"></app-edit-clientes-modal>
+
+    </div>
+
+</div>
+
+  
+
+<div class="clientes-table-container">
+  <table class="clientes-table">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Comprobante</th>
+              <th>Estatus</th>
+              <th>Opciones</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let cliente of displayedClientes">
+              <td>{{ cliente.idCliente }}</td>
+              <td>{{ cliente.nombre + ' ' + cliente.aPaterno + ' ' + cliente.aMaterno}}</td>
+              <td>{{ cliente.contacto.telefono }}</td>
+              <td>{{ cliente.contacto.correo }}</td>
+              <td>{{ cliente.datosComerciales.comprobante}}</td>
+              <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(cliente.estatus)">
+                      {{ cliente.estatus }}
+                  </span>
+              </td>
+              <td>
+                  <button class="edit-button" (click)="editarCliente(cliente)">
+                      <span class="material-icons">edit</span>Editar
+                  </button>
+                  <button class="delete-button" (click)="eliminarCliente(cliente)">
+                      <span class="material-icons">delete</span>Eliminar
+                  </button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

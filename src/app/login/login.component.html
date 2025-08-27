@@ -1,0 +1,67 @@
+<!-- Contenedor principal con fondo animado -->
+<div class="login_container" *ngIf="isVisible">
+  <!-- Modal principal -->
+  <div class="modal-backdrop">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="../../assets/leptonlogo.png" alt="Logo Lepton" class="login-logo" />
+      </div>
+
+      <!-- Título del formulario -->
+      <h2 class="login-title">Iniciar Sesión</h2>
+
+      <!-- Formulario de Login -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Campo de Usuario -->
+        <mat-form-field appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <span matPrefix class="input-icon material-icons">person</span>
+          <input matInput type="text" formControlName="username" required />
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            El usuario es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Campo de Contraseña -->
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <span matPrefix class="input-icon material-icons">lock</span>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePassword()"
+            class="password-toggle"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            La contraseña es obligatoria
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+            La contraseña debe tener al menos 6 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Botones -->
+      <div class="modal-actions">
+        <button mat-raised-button type="submit" class="save-button" [disabled]="!loginForm.valid">
+          Iniciar sesión
+        </button>
+      </div>
+      </form>
+
+      <!-- Enlace para registro -->
+      <p class="register-text">
+        ¿Nuevo usuario? <a href="#" (click)="onRegister()">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
+</div>

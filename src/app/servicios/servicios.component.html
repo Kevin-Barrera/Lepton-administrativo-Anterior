@@ -1,0 +1,65 @@
+<div class="header">
+    <h2>Listado de Servicios</h2>
+    <hr class="divider">
+  </div>
+  
+  <div class="header">
+    <div class="filter-bar">
+        <button class="new-button" (click)="openModal()">
+            <span class="material-icons">add</span> Nuevo
+        </button>
+        <!-- Modal de Registro de Servicio -->
+        <app-register-servicios-modal (servicioRegistered)="addNewServicio($event)"></app-register-servicios-modal>
+        
+        <app-edit-servicios-modal (servicioUpdated)="actualizarServicio($event)"></app-edit-servicios-modal>
+
+        <!-- Botón de paginado -->
+        <div class="pagination-container">
+            <button class="filter-btn" (click)="toggleShowAll()">
+                {{ showAll ? 'Paginado' : 'Mostrar todos' }}
+            </button>
+  
+            <div class="pagination" *ngIf="!showAll">
+                <button class="pagination-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">«</button>
+                <button *ngFor="let page of [].constructor(totalPages); let i = index" 
+                        class="pagination-btn" 
+                        [class.active]="currentPage === (i + 1)"
+                        (click)="setPage(i + 1)">
+                    {{ i + 1 }}
+                </button>
+                <button class="pagination-btn" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">»</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <div class="servicios-table-container">
+    <table class="servicios-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Código SAT</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let servicio of displayedServicios">
+                <td>{{ servicio.idServ }}</td>
+                <td>{{ servicio.descripcion }}</td>
+                <td>{{ servicio.precioConIVA | currency }}</td>
+                <td>{{ servicio.codigo }}</td>
+                <td>
+                    <button class="edit-button" (click)="editarServicio(servicio)">
+                        <span class="material-icons">edit</span>Editar
+                    </button>
+                    <button class="delete-button" (click)="eliminarServicio(servicio)">
+                        <span class="material-icons">delete</span>Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  

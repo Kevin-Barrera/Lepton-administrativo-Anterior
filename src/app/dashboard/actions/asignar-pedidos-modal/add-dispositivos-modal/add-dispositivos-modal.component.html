@@ -1,0 +1,131 @@
+<div class="modal-backdrop" *ngIf="isVisible">
+  <div class="modal-content" (click)="handleModalClick($event)">
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+    <h2>Agregar Dispositivos</h2>
+
+    <form [formGroup]="formDispositivo" class="form-container">
+      <div class="form-row-top">
+        <!-- Modelo -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Modelo</mat-label>
+            <input type="text" matInput placeholder="Selecciona un modelo" formControlName="modelo"
+              [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarModelo" autoActiveFirstOption>
+              <mat-option *ngFor="let modelo of filteredModelos$ | async" [value]="modelo">
+                {{ modelo.nombre }} - {{ modelo.precioConIVA | currency }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        <!-- Cantidad -->
+          <mat-form-field appearance="outline" class="example-full-width" >
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" min="1" formControlName="cantidad" />
+          </mat-form-field>
+      </div>
+      <div class="form-row-tp">
+        <!-- Tipo de Pago -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Tipo de Pago</mat-label>
+          <mat-select formControlName="tipoPago">
+            <mat-option value="Contado">Contado</mat-option>
+            <mat-option value="Arrendamiento">Arrendamiento</mat-option>
+            <mat-option value="Financiamiento">Financiamiento</mat-option>
+            <mat-option value="Propio">Propio</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Pago inicial Arrendamiento-->
+          <mat-form-field appearance="outline" class="half-width"  *ngIf="mostrarCamposArrendamiento">
+            <mat-label>Pago inicial</mat-label>
+            <input matInput type="number" formControlName="pagoInicial" min="0" class="example-right-align" placeholder="0.00" />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+      </div>
+       <div class="form-row-tp" *ngIf="mostrarCamposArrendamiento">
+          <!-- Arrendamiento mensual -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Arrendamiento mensual</mat-label>
+            <input matInput type="number" formControlName="arrendamientoMensual" min="0" class="example-right-align" readonly/>
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+          <!-- Plazo -->
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Plazo de arrendamiento (meses)</mat-label>
+            <input matInput type="number" formControlName="plazoArrendamiento" min="1" />
+          </mat-form-field>
+        </div>
+        
+        <!-- Tipo de Descuento -->
+       <div  *ngIf="mostrarTipoDescuento || mostrarCamposArrendamiento">
+        <h3 class="configurar-descuento-title">Configurar descuento</h3>
+              <div class="form-row-tp">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Tipo de Descuento</mat-label>
+                  <mat-select formControlName="tipoDescuento">
+                    <mat-option value="Ninguno">Ninguno</mat-option>
+                    <mat-option value="Porcentaje">% Porcentaje</mat-option>
+                    <mat-option value="Monto">$ Monto</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- % Porcentaje -->
+                <mat-form-field appearance="outline" class="half-width"
+                  *ngIf="formDispositivo.get('tipoDescuento')?.value === 'Porcentaje'">
+                  <mat-label>Porcentaje de descuento</mat-label>
+                  <input matInput type="number" min="0" max="100" formControlName="porcentajeDescuento" class="example-right-align" placeholder="0" />
+                  <span matTextSuffix="">%&nbsp;</span>
+                </mat-form-field>
+                <!-- $ Monto -->
+                <mat-form-field appearance="outline" class="half-width" *ngIf="formDispositivo.get('tipoDescuento')?.value === 'Monto'">
+                  <mat-label>Monto de descuento</mat-label>
+                  <input matInput type="number" min="0" formControlName="montoDescuento" class="example-right-align" placeholder="0.00"/>
+                  <span matTextPrefix>$&nbsp;</span>
+                </mat-form-field>
+              </div>
+        </div>
+        <div class="highlighted-row">
+          <div class="highlighted-item">
+            <div class="value">
+              $ {{ resumenPrecio }}
+              <span *ngIf="formDispositivo.get('tipoPago')?.value === 'Financiamiento'">
+                ({{ formDispositivo.get('mesesFinanciamiento')?.value || 1 }} meses)
+              </span>
+            </div>
+            <div class="label">
+              <ng-container *ngIf="formDispositivo.get('tipoPago')?.value === 'Financiamiento'; else precioLabel">
+                Precio Mensual
+              </ng-container>
+              <ng-template #precioLabel>Precio</ng-template>
+            </div>
+          </div>
+          <div class="highlighted-item">
+            <div class="value">{{ resumenPorcentajeDescuento }} %</div>
+            <div class="label">% Descuento</div>
+          </div>
+          <div class="highlighted-item">
+            <div class="value">$ {{ resumenDescuento }}</div>
+            <div class="label">Descuento</div>
+          </div>
+          <div class="highlighted-item">
+            <div class="value">$ {{ resumenSubtotal }}</div>
+            <div class="label">
+              <ng-container *ngIf="formDispositivo.get('tipoPago')?.value === 'Arrendamiento'; else labelSubtotal">
+                Pago inicial
+              </ng-container>
+              <ng-template #labelSubtotal>Subtotal</ng-template>
+            </div>
+          </div>
+        </div>
+
+    </form>
+    <!-- Acciones del modal -->
+    <div class="modal-actions">
+        <button mat-button type="button" (click)="close()">Cancelar</button>
+        <button mat-raised-button class="btn-guardar" type="submit" [disabled]="formDispositivo.invalid" (click)="guardarDispositivo()">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+  

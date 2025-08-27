@@ -1,0 +1,24 @@
+<div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
+    <div class="logo-container">
+        <img src="../../assets/isotipo vect color_iconos para routes.svg" alt="logo" class="logo" (click)="toggleCollapsed()">
+        
+        <div class="logo-text" @fadeInOut *ngIf="collapsed">Leptón</div>
+        <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
+            <i class="fal fa-times close-icon"></i>
+        </button>
+    </div>
+    <ul class="sidenav-nav">
+        <li class="sidenav-nav-item" *ngFor="let data of navData">
+            <a class="sidenav-nav-link" [routerLink]="[data.RouteLink]"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
+
+                <i class="sidenav-link-icon" [class]="data.icon"></i>
+                <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+                    {{data.label}}
+                </span>
+            </a>
+        </li>
+    </ul>
+
+</div>

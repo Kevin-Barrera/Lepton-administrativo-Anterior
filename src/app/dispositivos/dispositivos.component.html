@@ -1,0 +1,94 @@
+<div class="header">
+  <h2>Listado de Dispositivos</h2>
+  <hr class="divider">
+</div>
+
+<div class="filter-bar">
+  <!-- Contenedor izquierdo para los filtros -->
+  <div class="filter-container">
+      <label for="filterBy">Filtrar por:</label>
+      <select id="filterBy" [(ngModel)]="filterBy" (change)="onFilterByChange()">
+          <option value="todos">Todos</option>
+          <option value="tipo">Tipo</option>
+          <option value="marca">Marca</option>
+      </select>
+
+      <div *ngIf="filterBy !== 'todos'">
+          <label for="filterValue">{{ filterBy | titlecase }}:</label>
+          <select id="filterValue" [(ngModel)]="filterValue" (change)="applyFilters()">
+              <option value="">Todos</option>
+              <option *ngFor="let option of filterOptions" [value]="option">{{ option }}</option>
+          </select>
+      </div>
+      <div class="pagination-container">
+        <button class="filter-btn" (click)="toggleShowAll()">
+            {{ showAll ? 'Paginado' : 'Mostrar todos' }}
+        </button>
+
+        <div class="pagination" *ngIf="!showAll">
+            <button class="pagination-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">«</button>
+            <button *ngFor="let page of [].constructor(totalPages); let i = index" 
+                    class="pagination-btn" 
+                    [class.active]="currentPage === (i + 1)"
+                    (click)="setPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+            <button class="pagination-btn" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">»</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Botones alineados al extremo derecho -->
+  <div class="actions">
+      <button class="new-button" (click)="openModal()">
+          <span class="material-icons">add</span> Nuevo
+      </button>
+       <!-- Modal de Registro de Plan -->
+        <app-register-dispositivos-modal 
+        (dispositivoRegistered)="addNewDispositivo($event)">
+        </app-register-dispositivos-modal>
+
+        <!-- Modal de Edición de Plan --> 
+        <app-edit-dispositivos-modal (dispositivoUpdated)="actualizarDispositivo($event)"></app-edit-dispositivos-modal>
+
+    
+    </div>
+</div>
+
+
+
+<div class="productos-table-container">
+  <table class="productos-table">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Código del Dispositivo</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Tipo</th>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Opciones</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let dispositivo of displayedDispositivos">
+              <td>{{ dispositivo.idDis }}</td>
+              <td>{{ dispositivo.codigoDis }}</td>
+              <td>{{ dispositivo.nombre }}</td>
+              <td>{{ dispositivo.precioConIVA | currency }}</td>
+              <td>{{ dispositivo.tipoDis }}</td>
+              <td>{{ dispositivo.marca }}</td>
+              <td>{{ dispositivo.modelo }}</td>
+              <td>
+                  <button class="edit-button" (click)="editarDispositivo(dispositivo)">
+                      <span class="material-icons">edit</span>Editar
+                  </button>
+                  <button class="delete-button" (click)="eliminarDispositivo(dispositivo)">
+                      <span class="material-icons">delete</span>Eliminar
+                  </button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

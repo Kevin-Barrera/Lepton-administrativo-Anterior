@@ -1,0 +1,156 @@
+// Contenedor principal con fondo animado
+.login_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/Fondo.jpeg');
+    background-size: 50%;
+    background-repeat: repeat;
+    animation: slideBackground 10s linear infinite;
+    filter: blur(5px);
+    z-index: -1;
+  }
+}
+
+@keyframes slideBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+// Modal principal
+.modal-backdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+
+  // Logo centrado
+  .login-logo {
+    width: 270px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .login-title {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    .input-icon {
+      color: #888;
+      margin-left: 0.5rem;
+    }
+
+    
+  }
+
+  // Botón de visibilidad de contraseña
+  .password-toggle {
+    color: #888;
+
+    &:hover {
+      color: #1976d2;
+    }
+  }
+  /* Ícono de error para campos inválidos */
+mat-form-field.ng-invalid.ng-touched .input-icon {
+  color: #e63946; /* Rojo para íconos cuando hay errores */
+}
+
+/* Botón de visibilidad de contraseña en caso de error */
+mat-form-field.ng-invalid.ng-touched .password-toggle {
+  color: #e63946; /* Rojo para el botón de visibilidad de contraseña */
+}
+
+/* Restaura el color de los íconos cuando no hay errores */
+mat-form-field:not(.ng-invalid) .input-icon {
+  color: #888; /* Color por defecto */
+}
+
+mat-form-field:not(.ng-invalid) .password-toggle {
+  color: #888; /* Color por defecto */
+}
+
+
+  
+
+  // Enlace de registro
+  .register-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+
+    a {
+      color: #0074ff;
+      font-weight: bold;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: #005bb5;
+      }
+    }
+  }
+}
+
+
+.modal-actions {
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  .save-button {
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    background-color: #ccc; /* Color gris para cuando está deshabilitado */
+    color: white;
+    cursor: not-allowed; /* No clickeable cuando está deshabilitado */
+  
+    &:not(:disabled) {
+      background-color: #0074ff; /* Azul cuando está habilitado */
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #005bb5; /* Azul más oscuro al pasar el cursor */
+      }
+    }
+  }
+  
+}
+
+

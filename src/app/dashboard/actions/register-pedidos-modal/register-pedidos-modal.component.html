@@ -1,0 +1,121 @@
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2>Datos del Cliente</h2>
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Client Details -->
+    <div class="client-details">
+      <!-- Column Layout -->
+      <div class="client-info">
+        <div class="info-section">
+          <span class="label">Nombre del Cliente:</span>
+          <span class="value">{{ cliente?.nombre }} {{ cliente?.aPaterno }} {{ cliente?.aMaterno }}</span>
+        </div>
+        <div class="info-section">
+          <span class="label">Teléfono:</span>
+          <span class="value">{{ cliente?.contacto?.telefono }}</span>
+        </div>
+        <div class="info-section">
+          <span class="label">Correo Electrónico:</span>
+          <span class="value">{{ cliente?.contacto?.correo }}</span>
+        </div>
+      </div>
+
+      <div class="client-status">
+        <div class="info-section">
+          <span class="label">Próxima Fecha de Corte:</span>
+          <span class="value">{{ cliente?.datosComerciales?.fechaCorte | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-section">
+          <span class="label">Próxima Fecha de Pago:</span>
+          <span class="value">{{ cliente?.datosComerciales?.fechaPago | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-section">
+          <span class="label">Comprobante:</span>
+          <span class="value">{{ cliente?.datosComerciales?.comprobante }}</span>
+        </div>
+      </div>
+
+      <!-- Single Row -->
+      <div class="client-extra">
+        <div class="info-section status">
+          <span class="label">Estatus:</span>
+          <span
+            class="value"
+            [ngClass]="{
+              'status-activo': cliente?.estatus === 'activo',
+              'status-inactivo': cliente?.estatus === 'inactivo',
+              'status-pendiente': cliente?.estatus === 'pendiente'
+            }"
+          >
+            {{ cliente?.estatus }}
+          </span>
+        </div>
+        <div class="info-section dispositivos">
+          <span class="label">Número de Dispositivos:</span>
+          <span class="value">{{ cliente?.dispositivos }}</span>
+        </div>
+        <div class="info-section saldo">
+          <span class="label">Saldo:</span>
+          <span class="value">{{ cliente?.saldo | currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Content -->
+    <mat-tab-group class="tab-group-content">
+      <mat-tab label="Pedidos">
+        <div class="tab-content" >
+          <div class="header">
+            <h2>Asignar Pedidos</h2>
+            <hr class="divider" />
+          </div>
+          <div class="search-and-button">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-icon matPrefix>search</mat-icon>
+              <mat-label>Buscar</mat-label>
+              <input matInput placeholder="Escribe para buscar" />
+            </mat-form-field>
+            <button class="new-button" (click)="openModalPedidos()">
+              <span class="material-icons">add</span> Nuevo
+            </button>
+          </div>
+          <div class="content-area">
+            <!-- Aquí puedes añadir más contenido dinámico si es necesario -->
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Dispositivos">
+        <div class="tab-content">
+          <p>Contenido de Dispositivos...</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Comprobantes">
+        <div class="tab-content">
+          <p>Contenido de Comprobantes...</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Pagos">
+        <div class="tab-content">
+          <p>Contenido de Pagos...</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Historial de Correos">
+        <div class="tab-content">
+          <p>Contenido de Historial de Correos...</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-- Modal Secundario -->
+<app-asignar-pedidos-modal
+  *ngIf="isAsignarPedidosVisible"
+  (closeModal)="closeAsignarPedidosModal()"
+></app-asignar-pedidos-modal>

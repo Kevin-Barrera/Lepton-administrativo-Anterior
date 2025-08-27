@@ -1,0 +1,127 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2>Agregar al Pedido</h2>
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Sección con botones-->
+    <div class="highlighted-section" [ngClass]="{ 'empty-state': dispositivosAgregados.length === 0 }">
+
+      <div class="button-wrapper" [ngClass]="{ 'top-right': dispositivosAgregados.length > 0 }">
+        <div class="button-container">
+          <button class="new-button" (click)="openAddDispositivos()">
+            <span class="material-icons">add</span>
+            <span class="btn-dispositivo">Dispositivo</span>
+          </button>
+          <button class="new-button" (click)="selectService()">
+            <span class="material-icons">add</span>
+            <span class="btn-service">Servicio</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mensaje por defecto si no hay dispositivos agregados -->
+      <div class="order-message" *ngIf="dispositivosAgregados.length === 0">
+        No se han agregado pedidos.
+      </div>
+
+      <!-- Tabla de dispositivos agregados -->
+      <div *ngIf="dispositivosAgregados.length > 0" class="device-list">
+        <h3>Dispositivos Agregados</h3>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Cant.</th>
+              <th>Concepto</th>
+              <th>Precio</th>
+              <th>Descuento</th>
+              <th>Importe</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let dispositivo of dispositivosAgregados; let i = index">
+              <!-- Fila para el Dispositivo -->
+              <tr class="device-row">
+                <td>{{ dispositivo.cantidad || 1 }}</td>
+                
+                <td>
+                  <strong>{{ dispositivo.modelo?.nombre || 'Modelo desconocido' }}</strong>
+                  <br />
+                  <span class="condicion-pago">
+                    <strong>Condición de pago:</strong> {{ dispositivo.tipoPago || 'N/A' }}
+                  </span>
+                </td>
+          
+                <td>${{ dispositivo.resumenPrecio?.toFixed(2) || '0.00' }}</td>
+          
+                <td>${{ dispositivo.resumenDescuento?.toFixed(2) || '0.00' }}</td>
+          
+                <td class="importe-container">
+                  <span>${{ dispositivo.resumenSubtotal?.toFixed(2) || '0.00' }}</span>
+                </td>
+                <!-- Nueva celda para menú -->
+                <td class="menu-cell">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Opciones">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <mat-icon>edit</mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      <span>Eliminar</span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </tr>
+          
+              <!-- Fila adicional para el plan -->
+              <tr *ngIf="dispositivo.plan">
+                <td></td>
+                <td>
+                  <strong>{{ dispositivo.plan?.nombrePlan || 'Sin Plan' }}</strong>
+                  <br />
+                  <span class="condicion-pago">
+                    <strong>Periodo:</strong> {{ dispositivo.periodo || 'N/A' }}
+                  </span>
+                </td>
+                <td>${{ dispositivo.resumenPlanPrecio?.toFixed(2) || '0.00' }}</td>
+                <td>${{ dispositivo.resumenPlanDescuento?.toFixed(2) || '0.00' }}</td>
+                <td>${{ dispositivo.resumenPlanSubtotal?.toFixed(2) || '0.00' }}</td>
+              </tr>
+            </ng-container>
+          </tbody>  
+          <tfoot>
+            <tr>
+              <td colspan="3"></td> <!-- Deja las primeras tres columnas vacías -->
+              <td class="total-label">Total</td> <!-- "Total" en la columna de Descuento -->
+              <td class="total-value"><strong>${{ dispositivosAgregados[0]?.resumenTotal?.toFixed(2) || '0.00' }}</strong></td> <!-- Valor en Importe -->
+            </tr>
+          </tfoot>          
+        </table>
+      </div>
+    </div>
+
+    <!-- Botones al final -->
+    <div class="modal-actions">
+      <button mat-button type="button" (click)="close()">Cancelar</button>
+      <button mat-raised-button type="submit" class="save-button" [disabled]="!isSaveEnabled" (click)="onGuardar()">
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Add Dispositivos -->
+<app-add-dispositivos-modal
+  [hidden]="!isAddDispositivosVisible"
+  (dispositivoAdded)="onDispositivoAdded($event)"
+  (closeModal)="closeAddDispositivos()"
+></app-add-dispositivos-modal>

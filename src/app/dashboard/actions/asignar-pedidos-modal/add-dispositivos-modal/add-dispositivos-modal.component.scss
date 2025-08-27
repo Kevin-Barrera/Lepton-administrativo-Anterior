@@ -1,0 +1,151 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 70%;
+  height: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Flexbox para organizar el contenido en columna */
+
+  .close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+    }
+
+    .close-icon {
+      top: -0.3rem;
+    }
+  }
+  h2 {
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+  h3 {
+    padding-bottom: 0.5rem;
+  }
+  .form-container {
+    flex: 1; /* Hace que el formulario ocupe todo el espacio disponible */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columna */
+  }
+  .form-row-top {
+    display: flex;
+    gap: 1rem; /* Espacio entre los campos */
+
+    mat-form-field:first-child {
+      flex: 7; /* Modelo ocupa el 70% */
+    }
+
+    mat-form-field:last-child {
+      flex: 3; /* Cantidad ocupa el 30% */
+    }
+  }
+  .example-full-width {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0;
+  }
+  .form-row-tp {
+    display: flex;
+    gap: 1rem; /* Espacio entre los campos */
+    justify-content: flex-start;
+    margin-bottom: 0.5rem; /* Espacio inferior entre filas */
+  
+    .half-width {
+      width: 50%;
+      margin-bottom: 0.5rem;
+    }
+    .example-right-align {
+      text-align: right;
+    }
+    input[type="number"].example-right-align::-webkit-outer-spin-button,
+    input[type="number"].example-right-align::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .highlighted-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+
+    .highlighted-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .value {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .label {
+        font-size: 0.9rem;
+        color: #666;
+      }
+    }
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    gap: 1rem;
+
+    button {
+      min-width: 100px;
+      border-radius: 4px !important;
+    }
+    .btn-guardar {
+      background-color: #007bff !important;
+      color: white !important;
+      border-radius: 4px;
+      box-shadow: none !important;
+
+      &:hover:enabled {
+        background-color: #0069d9 !important;
+      }
+
+      &:disabled {
+        background-color: #CCCCCC !important;
+        color: white !important;
+        cursor: not-allowed !important;
+        box-shadow: none !important;
+      }
+    }
+
+  }
+}
+

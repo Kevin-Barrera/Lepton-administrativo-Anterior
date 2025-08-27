@@ -1,0 +1,150 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon class="close-icon">close</mat-icon>
+      </button>
+      <h2>Editar Dispositivo</h2>
+  
+      <form [formGroup]="dispositivoForm" (ngSubmit)="onSubmit()">
+        <!-- Nombre -->
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput type="text" formControlName="nombre" required />
+          <mat-error *ngIf="dispositivoForm.get('nombre')?.hasError('required')">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+  
+        <div class="form-row">
+          <!-- Código del Dispositivo -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Código Dispositivo</mat-label>
+            <input matInput type="text" formControlName="codigoDis" required />
+            <mat-error *ngIf="dispositivoForm.get('codigoDis')?.hasError('required')">
+              El código del dispositivo es obligatorio
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Tipo de Dispositivo -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Tipo de Dispositivo</mat-label>
+            <mat-select formControlName="tipoDis" required>
+              <mat-option value="GPS">GPS</mat-option>
+              <mat-option value="ACCESORIO">ACCESORIO</mat-option>
+              <mat-option value="OTROS">OTROS</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dispositivoForm.get('tipoDis')?.hasError('required')">
+              El tipo de dispositivo es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <!-- Precios en una sola línea -->
+        <div class="form-row">
+          <!-- Precio Bruto -->
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Precio Bruto</mat-label>
+            <span matTextPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="precio" class="example-right-align" placeholder="0.00" />
+            <mat-error *ngIf="dispositivoForm.get('precio')?.hasError('required')">
+              El precio bruto es obligatorio
+            </mat-error>
+            <mat-error *ngIf="dispositivoForm.get('precio')?.hasError('min')">
+              El precio debe ser mayor o igual a 0
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Precio Neto -->
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>Precio Neto</mat-label>
+            <span matTextPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="precioConIVA" class="example-right-align" placeholder="0.00" />
+            <mat-error *ngIf="dispositivoForm.get('precioConIVA')?.hasError('required')">
+              El precio neto es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-row">
+          <!-- Marca -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Marca</mat-label>
+            <input matInput type="text" formControlName="marca" required />
+            <mat-error *ngIf="dispositivoForm.get('marca')?.hasError('required')">
+              La marca es obligatoria
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Modelo -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Modelo</mat-label>
+            <input matInput type="text" formControlName="modelo" required />
+            <mat-error *ngIf="dispositivoForm.get('modelo')?.hasError('required')">
+              El modelo es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-row">
+          <!-- Tipo de Impuesto -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Tipo de Impuesto</mat-label>
+            <mat-select formControlName="tipoImp" required>
+              <mat-option value="IVA">IVA</mat-option>
+              <mat-option value="IEPS">IEPS</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dispositivoForm.get('tipoImp')?.hasError('required')">
+              El tipo de impuesto es obligatorio
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Código SAT -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Código SAT</mat-label>
+            <mat-select formControlName="codigoSat" required>
+              <mat-option value="12345678">12345678</mat-option>
+              <mat-option value="23456789">23456789</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dispositivoForm.get('codigoSat')?.hasError('required')">
+              El código SAT es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-row">
+          <!-- Unidad -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Unidad</mat-label>
+            <mat-select formControlName="unidad" required>
+              <mat-option value="Pieza">Pieza</mat-option>
+              <mat-option value="Paquete">Paquete</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dispositivoForm.get('unidad')?.hasError('required')">
+              La unidad es obligatoria
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Clave Unidad -->
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Clave Unidad</mat-label>
+            <mat-select formControlName="claveUnidad" required>
+              <mat-option value="H87">H87</mat-option>
+              <mat-option value="E48">E48</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dispositivoForm.get('claveUnidad')?.hasError('required')">
+              La clave de unidad es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <!-- Botones -->
+        <div class="modal-actions">
+          <button mat-button type="button" (click)="close()">Cancelar</button>
+          <button mat-raised-button type="submit" class="save-button" [disabled]="!dispositivoForm.valid">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

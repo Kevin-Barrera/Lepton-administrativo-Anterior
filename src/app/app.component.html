@@ -1,0 +1,18 @@
+<ng-toast  position="top-center"></ng-toast>       
+<ng-container *ngIf="isAuthenticated && !isLoginRoute; else loginView">
+  <app-sidenav (onToggleSidenav)="onToggLeSidenav($event)"></app-sidenav>
+  <app-header
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+  ></app-header>
+  <app-body 
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth">
+  </app-body>
+</ng-container>
+
+<ng-template #loginView>
+  
+  <router-outlet></router-outlet>
+   
+</ng-template>

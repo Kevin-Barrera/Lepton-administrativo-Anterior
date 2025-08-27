@@ -1,0 +1,275 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+    <h2>Registrar Nuevo Cliente</h2>
+
+    <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+      <mat-horizontal-stepper [linear]="true" #stepper>
+        <!-- Paso 1: Datos Generales y Contacto -->
+        <mat-step [stepControl]="datosGeneralesGroup">
+          <ng-template matStepLabel>Datos Generales</ng-template>
+          <div [formGroup]="datosGeneralesGroup">
+            <div class="form-row-top">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" required />
+                <mat-error *ngIf="datosGeneralesGroup.get('nombre')?.hasError('required')">
+                  El nombre es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Apellido Paterno</mat-label>
+                <input matInput formControlName="aPaterno" required />
+                <mat-error *ngIf="datosGeneralesGroup.get('aPaterno')?.hasError('required')">
+                  Apellido paterno es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              
+            </div>
+
+            <div class="form-row">
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Apellido Materno (Opcional)</mat-label>
+                <input matInput formControlName="aMaterno" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Nombre de la empresa (Opcional)</mat-label>
+                <input matInput formControlName="nombreEmpresa" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <h3>Contacto</h3>
+          <div [formGroup]="contactoGroup">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Teléfono</mat-label>
+                <input matInput type="tel" formControlName="telefono" required />
+                <mat-error *ngIf="contactoGroup.get('telefono')?.hasError('required')">
+                  El teléfono es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Correo Electrónico</mat-label>
+                <input matInput type="email" formControlName="correo" required />
+                <mat-error *ngIf="contactoGroup.get('correo')?.hasError('required')">
+                  El correo electrónico es obligatorio
+                </mat-error>
+                <mat-error *ngIf="emailExistsError">
+                  El correo ya está registrado
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="stepper-controls">
+            <button mat-button class="cancel-btn" type="button" (click)="close()">Cancelar</button>
+            <button mat-button class="next-btn" type="button" (click)="checkEmailBeforeProceeding(stepper)" >Siguiente</button>
+          </div>
+        </mat-step>
+
+        <!-- Paso 2: Domicilio -->
+        <mat-step [stepControl]="domicilioGroup">
+          <ng-template matStepLabel>Domicilio</ng-template>
+          <div [formGroup]="domicilioGroup">
+            <div class="form-row-top2">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Código Postal</mat-label>
+                <input matInput formControlName="codigoPostal" required />
+                <mat-error *ngIf="domicilioGroup.get('codigoPostal')?.hasError('required')">
+                  El código postal es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Colonia</mat-label>
+                <mat-select formControlName="colonia" required>
+                  <mat-option *ngFor="let colonia of colonias" [value]="colonia">
+                    {{ colonia }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="domicilioGroup.get('colonia')?.hasError('required')">
+                  La colonia es obligatoria
+                </mat-error>
+              </mat-form-field>              
+
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Calle</mat-label>
+                <input matInput formControlName="calle" required />
+                <mat-error *ngIf="domicilioGroup.get('calle')?.hasError('required')">
+                  La calle es obligatoria
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Número Exterior</mat-label>
+                <input matInput formControlName="numeroExterior" required />
+                <mat-error *ngIf="domicilioGroup.get('numeroExterior')?.hasError('required')">
+                  Número exterior es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Número Interior</mat-label>
+                <input matInput formControlName="numeroInterior" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Estado</mat-label>
+                <input matInput formControlName="estado" required />
+                <mat-error *ngIf="domicilioGroup.get('estado')?.hasError('required')">
+                  El estado es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Municipio</mat-label>
+                <input matInput formControlName="municipio" required />
+                <mat-error *ngIf="domicilioGroup.get('municipio')?.hasError('required')">
+                  El municipio es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="stepper-controls">
+              <button mat-button class="cancel-btn" type="button" (click)="close()">Cancelar</button>
+              <button mat-button class="prev-btn" type="button" matStepperPrevious>Anterior</button>
+              <button mat-button class="next-btn" type="button" matStepperNext>Siguiente</button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Paso 3: Datos Comerciales -->
+        <mat-step [stepControl]="datosComercialesGroup">
+          <ng-template matStepLabel>Datos Comerciales</ng-template>
+          <div [formGroup]="datosComercialesGroup">
+            <div class="form-row-top">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Comprobante</mat-label>
+                <mat-select formControlName="comprobante" (selectionChange)="onComprobanteChange($event)" required>
+                  <mat-option value="recibo">Recibo</mat-option>
+                  <mat-option value="factura">Factura</mat-option>
+                </mat-select>
+                <mat-error *ngIf="datosComercialesGroup.get('comprobante')?.hasError('required')">
+                  El comprobante es obligatorio
+                </mat-error>
+              </mat-form-field>
+        
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Emisor del Comprobante</mat-label>
+                <mat-select formControlName="emisorComprobante" required>
+                  <mat-option *ngFor="let emisor of emisores" [value]="emisor">{{ emisor }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="datosComercialesGroup.get('emisorComprobante')?.hasError('required')">
+                  El emisor del comprobante es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <!-- Campos visibles solo si el comprobante es "Factura" -->
+            <div *ngIf="isFactura">
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Correo Factura</mat-label>
+                  <input matInput formControlName="correoFactura" type="email" required />
+                  <mat-error *ngIf="datosComercialesGroup.get('correoFactura')?.hasError('required')">
+                    El correo de la factura es obligatorio
+                  </mat-error>
+                </mat-form-field>
+        
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>RFC Factura</mat-label>
+                  <input matInput formControlName="rfcFactura" required />
+                  <mat-error *ngIf="datosComercialesGroup.get('rfcFactura')?.hasError('required')">
+                    El RFC de la factura es obligatorio
+                  </mat-error>
+                </mat-form-field>
+              </div>
+        
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Régimen Fiscal</mat-label>
+                  <mat-select formControlName="regimenFiscal" required>
+                    <mat-option *ngFor="let regimen of regimenesFiscales" [value]="regimen.codigo">
+                      {{ regimen.codigo }} - {{ regimen.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="datosComercialesGroup.get('regimenFiscal')?.hasError('required')">
+                    El régimen fiscal es obligatorio
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Razón Social</mat-label>
+                  <input matInput formControlName="razonSocial" required />
+                  <mat-error *ngIf="datosComercialesGroup.get('razonSocial')?.hasError('required')">
+                    La razón social es obligatoria
+                  </mat-error>
+                </mat-form-field>
+              </div>
+        
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Nombre del Banco (Opcional)</mat-label>
+                  <input matInput formControlName="banco" />
+                </mat-form-field>
+        
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Cuenta Bancaria (Opcional)</mat-label>
+                  <input matInput formControlName="cuentaBancaria" />
+                </mat-form-field>
+                
+              </div>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Domicilio Fiscal (Opcional)</mat-label>
+                  <input matInput formControlName="domicilioFiscal" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Día de Corte</mat-label>
+                <input matInput type="number" formControlName="diaCorte" min="1" max="31" required />
+                <mat-error *ngIf="datosComercialesGroup.get('diaCorte')?.hasError('required')">
+                  El día de corte es obligatorio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Próxima Fecha de Corte</mat-label>
+                <input matInput type="date" formControlName="fechaCorte" readonly />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Próxima Fecha de Pago</mat-label>
+                <input matInput type="date" formControlName="fechaPago" readonly />
+              </mat-form-field>
+            </div>
+        
+            <div class="stepper-controls">
+              <button mat-button class="cancel-btn" type="button" (click)="close()">Cancelar</button>
+              <button mat-button class="prev-btn" type="button" matStepperPrevious>Anterior</button>
+              <button mat-button class="save-btn" type="submit" [disabled]="!clienteForm.valid">Guardar</button>
+            </div>
+          </div>
+        </mat-step>
+
+      </mat-horizontal-stepper>
+    </form>
+  </div>
+</div>

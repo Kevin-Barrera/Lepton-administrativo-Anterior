@@ -1,0 +1,122 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 650px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+  
+    .close-button {
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #888;
+      cursor: pointer;
+  
+      &:hover {
+        color: #333;
+      }
+  
+      .close-icon {
+        top: -0.3rem;
+      }
+    }
+  
+    h2 {
+      text-align: center;
+      padding-bottom: 20px;
+      font-weight: bold;
+    }
+  
+    .example-full-width {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  
+    .form-row {
+      display: flex;
+      gap: 1rem; /* Espacio entre los campos */
+      justify-content: space-between;
+      margin-bottom: 1rem;
+  
+      & > div,
+      mat-form-field {
+        flex: 1; /* Hacer que los campos ocupen el mismo espacio */
+        min-width: 150px; /* Asegura un ancho mínimo */
+      }
+    }
+  
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+  
+      label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+  
+      input[type='range'] {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+  
+      span {
+        font-size: 0.875rem;
+        color: #666;
+      }
+    }
+  
+    .example-right-align {
+      text-align: right;
+    }
+  
+    input.example-right-align::-webkit-outer-spin-button,
+    input.example-right-align::-webkit-inner-spin-button {
+      display: none;
+    }
+  
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+  
+      button {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+  
+      .save-button {
+        background-color: #ccc; /* Color gris para cuando está deshabilitado */
+        color: white;
+        cursor: not-allowed; /* No clickeable cuando está deshabilitado */
+  
+        &:not(:disabled) {
+          background-color: #0074ff; /* Azul cuando está habilitado */
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #005bb5; /* Azul más oscuro al pasar el cursor */
+          }
+        }
+      }
+    }
+  }
+  

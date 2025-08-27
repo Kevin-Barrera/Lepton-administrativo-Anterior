@@ -1,0 +1,105 @@
+<!-- Sección de Clientes Pendientes -->
+<div class="header">
+  <h2>Clientes Pendientes</h2>
+  <hr class="divider" />
+</div>
+
+<!-- Filtros y paginación para Clientes Pendientes -->
+<div class="header">
+  <h3>Filtrar</h3>  
+  <div class="filter-bar">
+    <div class="filter-container">
+      
+      <label for="status">Estatus:</label>
+              <select id="status" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+                <option value="pendiente">Pendiente</option>
+                <option value="activo">Activo</option>
+                <option value="">Todos</option>
+                  
+              </select>
+  
+      <div class="pagination-container">
+        <button class="filter-btn" (click)="toggleShowAll()">
+          {{ showAll ? 'Paginado' : 'Mostrar todos' }}
+        </button>
+  
+        <div class="pagination" *ngIf="!showAll">
+          <button class="pagination-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">«</button>
+          <button
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            class="pagination-btn"
+            [class.active]="currentPage === (i + 1)"
+            (click)="setPage(i + 1)"
+          >
+            {{ i + 1 }}
+          </button>
+          <button
+            class="pagination-btn"
+            (click)="setPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Tabla de Clientes Pendientes -->
+<div class="clientes-table-container">
+  <table class="clientes-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>
+          Próx. Fecha de Corte
+          <button class="sort-button" (click)="toggleSort('fechaCorte')">↕</button>
+        </th>
+        <th>Próx. Fecha de Pago</th>
+        <th>Comprobante</th>
+        <th>
+          Dispositivos
+          <button class="sort-button" (click)="toggleSort('dispositivos')">↕</button>
+        </th>
+        <th>Saldo</th>
+        <th>Estatus</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of displayedClientes">
+        <td>{{ cliente.idCliente }}</td>
+        <td>{{ cliente.nombre + ' ' + cliente.aPaterno + ' ' + cliente.aMaterno }}</td>
+        <td>{{ cliente.contacto.telefono }}</td>
+        <td>{{ cliente.contacto.correo }}</td>
+        <td>{{ cliente.datosComerciales.fechaCorte | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ cliente.datosComerciales.fechaPago | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ cliente.datosComerciales.comprobante }}</td>
+        <td>{{ cliente.dispositivos }}</td>
+        <td>{{ cliente.saldo | currency }}</td>
+        <td>
+          <span class="status-badge" [ngClass]="getStatusClass(cliente.estatus)">
+            {{ cliente.estatus }}
+          </span>
+        </td>
+        <td>
+          <button class="pedido-button" (click)="openModal(cliente)">
+            <span class="material-icons">add</span>Nuevo Pedido
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-register-pedidos-modal
+  *ngIf="selectedCliente"
+  [cliente]="selectedCliente"
+  (closeModal)="closeModal()"
+></app-register-pedidos-modal>

@@ -1,0 +1,68 @@
+<div class="header">
+  <h2>Listado de Planes</h2>
+  <hr class="divider">
+
+  <div class="filters">
+    <!-- Botón para abrir el modal de registro -->
+    <button class="new-btn" (click)="openModal()"><span class="material-icons">add</span>Nuevo</button>
+    
+    <!-- Modal de Registro de Plan -->
+    <app-register-plan-modal (planRegistered)="addNewPlan($event)"></app-register-plan-modal>
+    <app-edit-plan-modal (planUpdated)="updatePlan($event)"></app-edit-plan-modal>
+
+    <!-- Contenedor de Paginación -->
+    <div class="pagination-container">
+      <button class="filter-btn" (click)="toggleShowAll()">
+        {{ showAll ? 'Paginado' : 'Mostrar todos' }}
+      </button>
+      
+      <div class="pagination" *ngIf="!showAll">
+        <button class="pagination-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">«</button>
+        <button *ngFor="let page of [].constructor(totalPages); let i = index" 
+                class="pagination-btn" 
+                [class.active]="currentPage === (i + 1)"
+                (click)="setPage(i + 1)">
+          {{ i + 1 }}
+        </button>
+        <button class="pagination-btn" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">»</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-list">
+  <!-- Iteración sobre las tarjetas -->
+  <div class="card" *ngFor="let card of displayedPlanes">
+    <!-- Icono de la tarjeta -->
+    <div class="icon-wrapper">
+      <div class="icon" [style.background]="card.color">
+        <!-- Icono predeterminado de "insights" -->
+        <span class="material-icons">insights</span>
+      </div>
+    </div>
+    <!-- Contenido de la tarjeta -->
+    <div class="card-content">
+      <h3>{{ card.nombrePlan }}</h3>
+      <p><strong>Precio:</strong> {{ card.precioConIVA | currency }}</p>
+      <p><strong>ID:</strong> {{ card.noIdentificacion }}</p>
+      <p><strong>Duración:</strong> {{ card.duracion }}</p>
+
+      <!-- Barra de progreso -->
+      <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="card.servicios"></div>
+        <span class="progress-text">{{ card.servicios }}%</span>
+      </div>
+    </div>
+    <!-- Opciones de la tarjeta -->
+    <div class="card-footer">
+      <button class="action-btn edit-btn" (click)="editarPlan(card)">
+        <span class="material-icons">edit</span> Editar
+      </button>
+      <button 
+        class="action-btn delete-btn" 
+        (click)="deletePlan(card)">
+        <span class="material-icons">delete</span> Eliminar
+      </button>
+    </div>
+  </div>
+</div>

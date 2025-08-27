@@ -1,0 +1,69 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+    <h2>Registrar Nuevo Servicio</h2>
+
+    <form [formGroup]="servicioForm" (ngSubmit)="onSubmit()">
+      <!-- Descripción -->
+      <mat-form-field appearance="outline" class="example-full-width">
+        <mat-label>Descripción</mat-label>
+        <input matInput type="text" formControlName="descripcion" required />
+        <mat-error *ngIf="servicioForm.get('descripcion')?.hasError('required')">
+          La descripción es obligatoria
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Precios en una sola línea -->
+      <div class="form-row">
+        <!-- Precio Bruto -->
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Precio Bruto</mat-label>
+          <input matInput type="number" formControlName="precio" class="example-right-align" placeholder="0.00" />
+          <span matTextPrefix>$&nbsp;</span>
+          <mat-error *ngIf="servicioForm.get('precio')?.hasError('required')">
+            El precio bruto es obligatorio
+          </mat-error>
+          <mat-error *ngIf="servicioForm.get('precio')?.hasError('min')">
+            El precio debe ser mayor o igual a 0
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Precio Neto -->
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Precio Neto</mat-label>
+          <input matInput type="number" formControlName="precioConIVA" class="example-right-align" placeholder="0.00" />
+          <span matTextPrefix>$&nbsp;</span>
+          <mat-error *ngIf="servicioForm.get('precioConIVA')?.hasError('required')">
+            El precio neto es obligatorio
+          </mat-error>
+          <mat-error *ngIf="servicioForm.get('precioConIVA')?.hasError('min')">
+            El precio debe ser mayor o igual a 0
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Código SAT -->
+      <mat-form-field appearance="outline" class="example-full-width">
+        <mat-label>Código SAT</mat-label>
+        <mat-select formControlName="codigo" required>
+          <mat-option value="12345678">12345678</mat-option>
+          <mat-option value="23456789">23456789</mat-option>
+          <mat-option value="98765432">98765432</mat-option>
+        </mat-select>
+        <mat-error *ngIf="servicioForm.get('codigo')?.hasError('required')">
+          El código SAT es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Botones -->
+      <div class="modal-actions">
+        <button mat-button type="button" (click)="close()">Cancelar</button>
+        <button mat-raised-button  type="submit" class="save-button" [disabled]="!servicioForm.valid">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
